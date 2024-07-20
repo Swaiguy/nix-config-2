@@ -13,7 +13,7 @@
     ...
   }: {
     nixosConfigurations = {
-      Computer = nixpkgs.lib.nixosSystem {
+      ai = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs // {myvars.username = "kry";};
         modules = [
