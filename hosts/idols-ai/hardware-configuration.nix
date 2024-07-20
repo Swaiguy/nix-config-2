@@ -48,7 +48,7 @@
     luks.devices."crypted-nixos" = {
       # NOTE: DO NOT use device name here(like /dev/sda, /dev/nvme0n1p2, etc), use UUID instead.
       # https://github.com/ryan4yin/nix-config/issues/43
-      device = "/dev/disk/by-uuid/a21ca82a-9ee6-4e5c-9d3f-a93e84e4e0f4";
+      device = "/dev/disk/by-uuid/4db270a4-41df-46e2-abec-585f33663bf1";
       # the keyfile(or device partition) that should be used as the decryption key for the encrypted device.
       # if not specified, you will be prompted for a passphrase instead.
       #keyFile = "/root-part.key";
@@ -64,7 +64,7 @@
   };
 
   fileSystems."/btr_pool" = {
-    device = "/dev/disk/by-uuid/1167076c-dee1-486c-83c1-4b1af37555cd";
+    device = "/dev/disk/by-uuid/2961dbde-e154-463b-8c57-edcaedc1e0e1";
     fsType = "btrfs";
     # btrfs's top-level subvolume, internally has an id 5
     # we can access all other subvolumes from this subvolume.
@@ -81,20 +81,20 @@
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/1167076c-dee1-486c-83c1-4b1af37555cd";
+    device = "/dev/disk/by-uuid/2961dbde-e154-463b-8c57-edcaedc1e0e1";
     fsType = "btrfs";
     options = ["subvol=@nix" "noatime" "compress-force=zstd:1"];
   };
 
   # for guix store, which use `/gnu/store` as its store directory.
   fileSystems."/gnu" = {
-    device = "/dev/disk/by-uuid/1167076c-dee1-486c-83c1-4b1af37555cd";
+    device = "/dev/disk/by-uuid/2961dbde-e154-463b-8c57-edcaedc1e0e1";
     fsType = "btrfs";
     options = ["subvol=@guix" "noatime" "compress-force=zstd:1"];
   };
 
   fileSystems."/persistent" = {
-    device = "/dev/disk/by-uuid/1167076c-dee1-486c-83c1-4b1af37555cd";
+    device = "/dev/disk/by-uuid/2961dbde-e154-463b-8c57-edcaedc1e0e1";
     fsType = "btrfs";
     options = ["subvol=@persistent" "compress-force=zstd:1"];
     # impermanence's data is required for booting.
@@ -102,20 +102,20 @@
   };
 
   fileSystems."/snapshots" = {
-    device = "/dev/disk/by-uuid/1167076c-dee1-486c-83c1-4b1af37555cd";
+    device = "/dev/disk/by-uuid/2961dbde-e154-463b-8c57-edcaedc1e0e1";
     fsType = "btrfs";
     options = ["subvol=@snapshots" "compress-force=zstd:1"];
   };
 
   fileSystems."/tmp" = {
-    device = "/dev/disk/by-uuid/1167076c-dee1-486c-83c1-4b1af37555cd";
+    device = "/dev/disk/by-uuid/2961dbde-e154-463b-8c57-edcaedc1e0e1";
     fsType = "btrfs";
     options = ["subvol=@tmp" "compress-force=zstd:1"];
   };
 
   # mount swap subvolume in readonly mode.
   fileSystems."/swap" = {
-    device = "/dev/disk/by-uuid/1167076c-dee1-486c-83c1-4b1af37555cd";
+    device = "/dev/disk/by-uuid/2961dbde-e154-463b-8c57-edcaedc1e0e1";
     fsType = "btrfs";
     options = ["subvol=@swap" "ro"];
   };
@@ -131,7 +131,7 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/90FB-9F88";
+    device = "/dev/disk/by-uuid/414C-B36F";
     fsType = "vfat";
   };
 
