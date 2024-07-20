@@ -2,9 +2,6 @@
   # ssh-agent is used to pull my private secrets repo from github when deploying my nixos config.
   programs.ssh.startAgent = true;
 
-   services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "kry";
-  users.users.kry.password ="123";
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
