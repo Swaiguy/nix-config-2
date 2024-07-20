@@ -21,15 +21,48 @@
 > [i3-kickstarter](https://github.com/ryan4yin/nix-config/tree/i3-kickstarter), which will be much
 > easier to understand**.
 
-This repository is home to the nix code that builds my systems:
+parted /dev/vda -- mklabel gpt
 
-1. NixOS Desktops: NixOS with home-manager, i3, hyprland, agenix, etc.
-2. macOS Desktops: nix-darwin with home-manager, share the same home-manager configuration with
-   NixOS Desktops.
-3. NixOS Servers: virtual machines running on Proxmox/KubeVirt, with various services, such as
-   kubernetes, homepage, prometheus, grafana, etc.
+parted /dev/vda -- mkpart ESP fat32 2MB 629MB
 
-See [./hosts](./hosts) for details of each host.
+parted /dev/vda -- set 1 esp on
+
+parted /dev/vda -- mkpart primary 630MB 100%
+
+cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-random --verify-passphrase /dev/vda2
+
+cryptsetup luksOpen /dev/vda2 crypted-nixos
+
+mkfs.fat -F 32 -n ESP /dev/vda1
+
+mkfs.btrfs -L crypted-nixos /dev/mapper/crypted-nixos
+
+mount /dev/mapper/crypted-nixos /mnt  # create-btrfs
+btrfs subvolume create /mnt/@nix  # create-btrfs
+btrfs subvolume create /mnt/@guix  # create-btrfs
+btrfs subvolume create /mnt/@tmp  # create-btrfs
+btrfs subvolume create /mnt/@swap  # create-btrfs
+btrfs subvolume create /mnt/@persistent  # create-btrfs
+btrfs subvolume create /mnt/@snapshots  # create-btrfs
+umount /mnt  # create-btrfs
+
+mkdir /mnt/{nix,gnu,tmp,swap,persistent,snapshots,boot}  # mount-1
+mount -o compress-force=zstd:1,noatime,subvol=@nix /dev/mapper/crypted-nixos /mnt/nix  # mount-1
+mount -o compress-force=zstd:1,noatime,subvol=@guix /dev/mapper/crypted-nixos /mnt/gnu  # mount-1
+mount -o compress-force=zstd:1,subvol=@tmp /dev/mapper/crypted-nixos /mnt/tmp  # mount-1
+mount -o subvol=@swap /dev/mapper/crypted-nixos /mnt/swap  # mount-1
+mount -o compress-force=zstd:1,noatime,subvol=@persistent /dev/mapper/crypted-nixos /mnt/persistent  # mount-1
+mount -o compress-force=zstd:1,noatime,subvol=@snapshots /dev/mapper/crypted-nixos /mnt/snapshots  # mount-1
+
+mount /dev/vda1 /mnt/boot
+
+btrfs filesystem mkswapfile --size 96g --uuid clear /mnt/swap/swapfile
+
+lsattr /mnt/swap
+
+swapon /mnt/swap/swapfile
+
+
 
 ## Why NixOS & Flakes?
 
