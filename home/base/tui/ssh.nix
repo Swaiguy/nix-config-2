@@ -20,7 +20,8 @@
         # It has the same effect as adding cli option `ssh -A user@host`
         ForwardAgent yes
         # romantic holds my homelab~
-        IdentityFile /etc/agenix/ssh-key-romantic
+      ##NOW MINE!!
+        IdentityFile /etc/agenix/ssh-key-remote
         # Specifies that ssh should only use the identity file explicitly configured above
         # required to prevent sending default identity files first.
         IdentitiesOnly yes
