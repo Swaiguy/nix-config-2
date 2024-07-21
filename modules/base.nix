@@ -78,7 +78,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPoa9uEI/gR5+klqTQwvCgD6CD5vT5iD9YCNx2xNrH3B kry@fern"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPwZ9MdotnyhxIJrI4gmVshExHiZOx+FGFhcW7BaYkfR kry@harmonica"
     ];
-  }
+  };
 
   nix.settings = {
     # enable flakes globally
