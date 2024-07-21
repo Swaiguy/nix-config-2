@@ -89,6 +89,8 @@ in {
             }
             // user_readable;
 
+            };
+
             environment.etc = {
                       
             "agenix/ssh-key-remote" = {
@@ -96,8 +98,9 @@ in {
             mode = "0600";
             user = myvars.username;
 
-          };
             };
+
+                              };
 
                 ##(mkIf cfg.server.webserver.enable {
         ##age.secrets = {
@@ -109,8 +112,8 @@ in {
         ##};
       ##})
 
-        };
-      })
+
+                              })
 
       ]);
 }
