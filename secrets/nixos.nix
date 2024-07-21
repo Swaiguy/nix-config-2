@@ -79,5 +79,38 @@ in {
           }
         ];
       }
+
+    (mkIf cfg.desktop.enable {
+        age.secrets = {
+
+          "ssh-key-remote" =
+            {
+              file = "${mysecrets}"; ##AFTER MYSECRETS}your/directory/ssh-key-remote.age"
+            }
+            // user_readable;
+
+            environment.etc = {
+                      
+            "agenix/ssh-key-romantic" = {
+            source = config.age.secrets."ssh-key-romantic".path;
+            mode = "0600";
+            user = myvars.username;
+
+          };
+            };
+
+                ##(mkIf cfg.server.webserver.enable {
+        ##age.secrets = {
+          ##"certs/ecc-server.key" = {
+            ##file = "${mysecrets}/certs/ecc-server.key.age";
+            ##mode = "0400";
+            ##owner = "caddy"; # used by caddy only
+          ##};
+        ##};
+      ##})
+
+        };
+      })
+
       ]);
 }
