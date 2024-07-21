@@ -16,7 +16,7 @@
   nix.buildMachines = let
     sshUser = myvars.username;
     # ssh key's path on local machine
-    sshKey = "/etc/agenix/ssh-key-remote";
+    sshKey = "/etc/agenix/ssh-key-remote"; ##SET EVERYTHING ELSE UP PROPERLY BEFORE CHANGING THIS IN TROUBLE SHOOTING
     systems = [
       # native arch
       "x86_64-linux"
