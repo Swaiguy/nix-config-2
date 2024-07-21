@@ -91,8 +91,8 @@ in {
 
             environment.etc = {
                       
-            "agenix/ssh-key-romantic" = {
-            source = config.age.secrets."ssh-key-romantic".path;
+            "agenix/ssh-key-remote" = {
+            source = config.age.secrets."ssh-key-remote".path;
             mode = "0600";
             user = myvars.username;
 
