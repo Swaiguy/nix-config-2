@@ -139,7 +139,7 @@
     # my private secrets, it's a private repository, you need to replace it with your own.
     # use ssh protocol to authenticate via ssh-agent/ssh-key, and shallow clone to save time
     mysecrets = {
-      url = "https://git@github.com/Swaiguy/nix-secrets.git?shallow=1";
+      url = "https://github.com/Swaiguy/nix-secrets.git?shallow=1";
       flake = false;
     };
 
