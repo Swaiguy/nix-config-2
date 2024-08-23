@@ -14,25 +14,31 @@
   </a>
 </p>
 
-parted /dev/vda -- mklabel gpt
+parted /dev/sda -- mklabel gpt
 
-parted /dev/vda -- mkpart ESP fat32 2MB 629MB
+parted /dev/sda -- mkpart ESP fat32 2MB 849MB
 
-parted /dev/vda -- set 1 esp on
+parted /dev/sda -- set 1 esp on
 
-parted /dev/vda -- mkpart primary 630MB 100%
+parted /dev/sda -- mkpart primary 850MB 100%
 
-cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-random --verify-passphrase /dev/vda2
+--------------------------------------------------
 
-cryptsetup luksOpen /dev/vda2 crypted-nixos
+cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-random --verify-passphrase /dev/sda2
 
-mkfs.fat -F 32 -n ESP /dev/vda1
+cryptsetup luksOpen /dev/sda2 OS
 
-mkfs.btrfs -L crypted-nixos /dev/mapper/crypted-nixos
+--------------------------------------------------
 
-mount /dev/mapper/crypted-nixos /mnt  # create-btrfs
+mkfs.fat -F 32 -n ESP /dev/sda1
 
-btrfs subvolume create /mnt/@nix  
+mkfs.btrfs -L OS /dev/mapper/OS
+
+mount /dev/mapper/OS /mnt  # create-btrfs
+
+btrfs subvolume create /mnt/@nix 
+
+btrfs subvolume create /mnt/@cachy
 
 btrfs subvolume create /mnt/@guix  
 
@@ -46,27 +52,33 @@ btrfs subvolume create /mnt/@snapshots
 
 umount /mnt
 
-mkdir /mnt/{nix,gnu,tmp,swap,persistent,snapshots,boot}  # mount-1
+mkdir /mnt/{cachy,nix,gnu,tmp,swap,persistent,snapshots,boot}  # mount-1
 
-mount -o compress-force=zstd:1,noatime,subvol=@nix /dev/mapper/crypted-nixos /mnt/nix
+mount -o compress-force=zstd:1,noatime,subvol=@nix /dev/mapper/OS /mnt/nix
 
-mount -o compress-force=zstd:1,noatime,subvol=@guix /dev/mapper/crypted-nixos /mnt/gnu
+mount -o compress-force=zstd:1,noatime,subvol=@cachy /dev/mapper/OS /mnt/cachy
 
-mount -o compress-force=zstd:1,subvol=@tmp /dev/mapper/crypted-nixos /mnt/tmp
+mount -o compress-force=zstd:1,noatime,subvol=@guix /dev/mapper/OS /mnt/gnu
 
-mount -o subvol=@swap /dev/mapper/crypted-nixos /mnt/swap
+mount -o compress-force=zstd:1,subvol=@tmp /dev/mapper/OS /mnt/tmp
 
-mount -o compress-force=zstd:1,noatime,subvol=@persistent /dev/mapper/crypted-nixos /mnt/persistent
+mount -o subvol=@swap /dev/mapper/OS /mnt/swap
 
-mount -o compress-force=zstd:1,noatime,subvol=@snapshots /dev/mapper/crypted-nixos /mnt/snapshots
+mount -o compress-force=zstd:1,noatime,subvol=@persistent /dev/mapper/OS /mnt/persistent
 
-mount /dev/vda1 /mnt/boot
+mount -o compress-force=zstd:1,noatime,subvol=@snapshots /dev/mapper/OS /mnt/snapshots
 
-btrfs filesystem mkswapfile --size 96g --uuid clear /mnt/swap/swapfile
+mount /dev/sda1 /mnt/boot
+
+btrfs filesystem mkswapfile --size 16g --uuid clear /mnt/swap/swapfile
 
 lsattr /mnt/swap
 
 swapon /mnt/swap/swapfile
+
+lsblk
+
+-----------------------------------------------------------
 
 
 
