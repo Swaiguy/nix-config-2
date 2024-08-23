@@ -14,6 +14,8 @@
   </a>
 </p>
 
+sudo su
+
 parted /dev/sda -- mklabel gpt
 
 parted /dev/sda -- mkpart ESP fat32 2MB 849MB
