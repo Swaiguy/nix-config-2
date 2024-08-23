@@ -56,9 +56,9 @@ umount /mnt
 
 mkdir /mnt/{cachy,nix,gnu,tmp,swap,persistent,snapshots,boot}  # mount-1
 
-mount -o compress-force=zstd:1,noatime,subvol=@nix /dev/mapper/OS /mnt/nix
-
 mount -o compress-force=zstd:1,noatime,subvol=@cachy /dev/mapper/OS /mnt/cachy
+
+mount -o compress-force=zstd:1,noatime,subvol=@nix /dev/mapper/OS /mnt/nix
 
 mount -o compress-force=zstd:1,noatime,subvol=@guix /dev/mapper/OS /mnt/gnu
 
