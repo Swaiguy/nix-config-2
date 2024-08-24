@@ -26,9 +26,9 @@ parted /dev/sda -- mkpart primary 850MB 100%
 
 --------------------------------------------------
 
-cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-random --verify-passphrase /dev/sda2
+cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-random --verify-passphrase /dev/sda3
 
-cryptsetup luksOpen /dev/sda2 OS
+cryptsetup luksOpen /dev/sda3 OS
 
 --------------------------------------------------
 
@@ -40,7 +40,7 @@ mount /dev/mapper/OS /mnt  # create-btrfs
 
 btrfs subvolume create /mnt/@nix 
 
-btrfs subvolume create /mnt/@cachy
+btrfs subvolume create /mnt/@cachyos
 
 btrfs subvolume create /mnt/@guix  
 
@@ -54,9 +54,9 @@ btrfs subvolume create /mnt/@snapshots
 
 umount /mnt
 
-mkdir /mnt/{cachy,nix,gnu,tmp,swap,persistent,snapshots,boot}  # mount-1
+mkdir /mnt/{cachyos,nix,gnu,tmp,swap,persistent,snapshots,boot}  # mount-1
 
-mount -o compress-force=zstd:1,noatime,subvol=@cachy /dev/mapper/OS /mnt/cachy
+mount -o compress-force=zstd:1,noatime,subvol=@cachyos /dev/mapper/OS /mnt/cachyos
 
 mount -o compress-force=zstd:1,noatime,subvol=@nix /dev/mapper/OS /mnt/nix
 
@@ -72,7 +72,7 @@ mount -o compress-force=zstd:1,noatime,subvol=@snapshots /dev/mapper/OS /mnt/sna
 
 mount /dev/sda1 /mnt/boot
 
-btrfs filesystem mkswapfile --size 16g --uuid clear /mnt/swap/swapfile
+btrfs filesystem mkswapfile --size 4g --uuid clear /mnt/swap/swapfile
 
 lsattr /mnt/swap
 
