@@ -26,9 +26,9 @@ parted /dev/sda -- mkpart primary 850MB 100%
 
 --------------------------------------------------
 
-cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-random --verify-passphrase /dev/sda3
+cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --hash sha512 --iter-time 5000 --key-size 256 --pbkdf argon2id --use-random --verify-passphrase /dev/sda2
 
-cryptsetup luksOpen /dev/sda3 OS
+cryptsetup luksOpen /dev/sda2 OS
 
 --------------------------------------------------
 
